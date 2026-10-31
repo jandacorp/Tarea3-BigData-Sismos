@@ -111,10 +111,17 @@ El componente de procesamiento en tiempo real utiliza Apache Kafka 3.9.2 configu
 
 El repositorio incluye:
 
-- kafka_producer.py: genera datos simulados de sensores y los publica en el topic sensor_data.
-- spark_streaming_consumer.py: consume los mensajes desde Kafka y calcula promedios de temperatura y humedad por sensor en ventanas de un minuto.
+- `kafka_producer.py`: genera datos simulados de sensores y los publica en el topic `sensor_data`.
+- `spark_streaming_consumer.py`: consume los mensajes desde Kafka y calcula promedios de temperatura y humedad por sensor en ventanas de un minuto.
 
 Para ejecutar el productor:
 
-```bash
+```
 python3 kafka_producer.py
+```
+
+Para ejecutar el consumidor con Spark Streaming:
+
+```
+spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.8 spark_streaming_consumer.py
+```
