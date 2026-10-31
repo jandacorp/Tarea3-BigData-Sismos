@@ -32,11 +32,13 @@ Instalacion de librerias Python:
 pip3 install requests matplotlib
 ```
 
-## 4. Estructura sugerida
+## 4. Estructura del proyecto
 
 ```text
-Tarea3_Sismos/
+Tarea3-BigData-Sismos/
 ├── analisis_sismos.py
+├── kafka_producer.py
+├── spark_streaming_consumer.py
 ├── README.md
 ├── datos/
 └── resultados/
@@ -58,7 +60,7 @@ spark-submit analisis_sismos.py \
 
 El parametro `--descargar` obtiene los CSV directamente del USGS antes de iniciar el procesamiento.
 
-Si los CSV ya estan almacenados en `./datos`, puede ejecutar:
+Para procesar archivos CSV previamente descargados en la carpeta ./datos, ejecute el script sin la opcion --descargar:
 
 ```bash
 spark-submit analisis_sismos.py \
@@ -85,7 +87,7 @@ El programa realiza las siguientes tareas con PySpark y DataFrames:
 13. Exportacion de resultados en CSV.
 14. Generacion opcional de graficas PNG.
 
-## 7. Resultados esperados
+## 7. Resultados generados
 
 La carpeta `resultados` contiene directorios CSV generados por Spark y, si `matplotlib` esta instalado, las siguientes graficas:
 
@@ -103,21 +105,16 @@ Tambien se generan resultados tabulares para:
 - regiones con mayor cantidad de eventos;
 - eventos de mayor magnitud.
 
-## 8. Evidencias para la entrega
+## 8. Procesamiento en tiempo real con Kafka y Spark Streaming
 
-Durante la ejecucion se recomienda capturar:
+El componente de procesamiento en tiempo real utiliza Apache Kafka 3.9.2 configurado en modo KRaft y Spark Streaming.
 
-- version de Spark y Java;
-- carga del dataset;
-- esquema del DataFrame;
-- cantidad de registros antes y despues de la limpieza;
-- resumen estadistico;
-- eventos por ano;
-- distribucion por magnitud y profundidad;
-- eventos de mayor magnitud;
-- graficas generadas;
-- ejecucion completa mediante `spark-submit`.
+El repositorio incluye:
 
-## 9. Componente Kafka / Spark Streaming
+- kafka_producer.py: genera datos simulados de sensores y los publica en el topic sensor_data.
+- spark_streaming_consumer.py: consume los mensajes desde Kafka y calcula promedios de temperatura y humedad por sensor en ventanas de un minuto.
 
-El procesamiento en tiempo real se desarrolla por separado siguiendo el **Anexo 3 - Instructivo Spark Streaming y Kafka** suministrado por el curso. Este repositorio puede incorporar posteriormente los scripts del productor Kafka y del consumidor Spark Streaming.
+Para ejecutar el productor:
+
+```bash
+python3 kafka_producer.py
