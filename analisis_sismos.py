@@ -14,7 +14,6 @@ Uso recomendado:
         --fin 2025-12-31 \
         --min-mag 2.5
 
-Si los CSV ya fueron descargados, omita --descargar.
 """
 
 import argparse
@@ -229,7 +228,7 @@ def main():
         spark.read.option("header", True)
         .option("inferSchema", True)
         .option("mode", "PERMISSIVE")
-        .csv(str(carpeta_datos / "*.csv"))
+        .csv([str(x) for x in archivos])
     )
 
     total_raw = df_raw.count()
